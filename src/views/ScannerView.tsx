@@ -337,6 +337,7 @@ export function ScannerView() {
       if (nativeDetectorRef.current) {
         try {
           const barcodes = await nativeDetectorRef.current.detect(video);
+          if (isCancelled) return; // Prevent state updates if component unmounted
           if (barcodes && barcodes.length > 0 && barcodes[0].rawValue) {
             handleBarcodeDetected(barcodes[0].rawValue);
             return;
@@ -347,7 +348,7 @@ export function ScannerView() {
       }
 
       // PASS 2: ZXing MultiFormat Engine with Correct Grayscale Bitmap
-      if (zxingReaderRef.current && canvasRef.current) {
+      if (zxingReaderRef.current && canvasRef.current && !isCancelled) {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         if (ctx) {
@@ -400,6 +401,13 @@ export function ScannerView() {
     return () => {
       isCancelled = true;
       if (timerId) clearInterval(timerId);
+
+      // Cleanup ZXing resources to prevent memory leaks and stuck video loops
+      // Since it's decoding from a canvas bitmap manually, there's no ongoing stream in zxing to stop,
+      // but we can clear the reader reference.
+      if (zxingReaderRef.current) {
+         zxingReaderRef.current = null;
+      }
     };
   }, [handleBarcodeDetected]);
 
@@ -675,7 +683,7 @@ export function ScannerView() {
               <div className="flex gap-4 items-center">
                 {/* Kontrollierter Produktbild-Container: Ragt nie heraus, blockiert keine Buttons */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-zinc-50 overflow-hidden shrink-0 border border-zinc-200/70 relative p-1.5 flex items-center justify-center">
-                  <img
+                  <img loading="lazy"
                     src={detectedProduct.imageUrl}
                     alt={detectedProduct.name}
                     className="w-full h-full object-contain"
@@ -956,7 +964,7 @@ export function ScannerView() {
                             className="bg-zinc-50 hover:bg-zinc-100 p-3 rounded-2xl border border-zinc-200/80 flex items-center justify-between cursor-pointer transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              <img src={alt.imageUrl} alt={alt.name} className="w-10 h-10 object-contain rounded-xl bg-white p-1 border" />
+                              <img loading="lazy" src={alt.imageUrl} alt={alt.name} className="w-10 h-10 object-contain rounded-xl bg-white p-1 border" />
                               <div>
                                 <span className="font-bold text-xs text-zinc-900 block">{alt.name}</span>
                                 <span className="text-[10px] text-zinc-400">{alt.brand}</span>

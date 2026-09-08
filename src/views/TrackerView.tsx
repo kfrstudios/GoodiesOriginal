@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, useMemo } from 'react';
 import { 
   Flame, 
   Droplets, 
@@ -98,26 +98,37 @@ export function TrackerView() {
   const [customFormFat, setCustomFormFat] = useState<string>('');
   const [customFormNotes, setCustomFormNotes] = useState<string>('');
 
-  const totalCalories = todayMeals.reduce((sum, m) => sum + m.calories, 0);
-  const totalProtein = todayMeals.reduce((sum, m) => sum + m.protein, 0);
-  const totalCarbs = todayMeals.reduce((sum, m) => sum + m.carbs, 0);
-  const totalFat = todayMeals.reduce((sum, m) => sum + m.fat, 0);
+  const { totalCalories, totalProtein, totalCarbs, totalFat, totalSugar, totalSalt, remainingCalories, calPercent } = useMemo(() => {
+    let calories = 0, protein = 0, carbs = 0, fat = 0, sugar = 0, salt = 0;
 
-  // Calculate estimated sugar & salt from products in todayMeals
-  const totalSugar = todayMeals.reduce((sum, m) => {
-    const prod = products.find(p => p.id === m.productId || p.name === m.productName);
-    if (!prod) return sum;
-    return sum + (prod.nutritionPer100g.sugars * m.portionGrams) / 100;
-  }, 0);
+    // Create a lookup map for faster product resolution
+    const productsMap = new Map(products.map(p => [p.id, p]));
+    const productsNameMap = new Map(products.map(p => [p.name, p]));
 
-  const totalSalt = todayMeals.reduce((sum, m) => {
-    const prod = products.find(p => p.id === m.productId || p.name === m.productName);
-    if (!prod) return sum;
-    return sum + (prod.nutritionPer100g.salt * m.portionGrams) / 100;
-  }, 0);
+    for (const m of todayMeals) {
+      calories += m.calories;
+      protein += m.protein;
+      carbs += m.carbs;
+      fat += m.fat;
 
-  const remainingCalories = user.dailyGoals.calories - totalCalories;
-  const calPercent = Math.min(100, Math.round((totalCalories / user.dailyGoals.calories) * 100));
+      const prod = productsMap.get(m.productId) || productsNameMap.get(m.productName);
+      if (prod) {
+        sugar += (prod.nutritionPer100g.sugars * m.portionGrams) / 100;
+        salt += (prod.nutritionPer100g.salt * m.portionGrams) / 100;
+      }
+    }
+
+    return {
+      totalCalories: calories,
+      totalProtein: protein,
+      totalCarbs: carbs,
+      totalFat: fat,
+      totalSugar: sugar,
+      totalSalt: salt,
+      remainingCalories: user.dailyGoals.calories - calories,
+      calPercent: Math.min(100, Math.round((calories / user.dailyGoals.calories) * 100))
+    };
+  }, [todayMeals, products, user.dailyGoals.calories]);
 
   const mealCategories: { type: MealType; label: string; icon: string }[] = [
     { type: 'breakfast', label: 'Frühstück', icon: '☕' },
@@ -140,20 +151,24 @@ export function TrackerView() {
   // Autocomplete / Search filters
   const cleanQuery = inlineSearchQuery.trim().toLowerCase();
 
-  const matchingProducts: Product[] = cleanQuery
-    ? products.filter(p => 
-        p.name.toLowerCase().includes(cleanQuery) ||
-        p.brand.toLowerCase().includes(cleanQuery) ||
-        p.category.toLowerCase().includes(cleanQuery)
-      )
-    : products.slice(0, 15);
+  const matchingProducts: Product[] = useMemo(() => {
+    return cleanQuery
+      ? products.filter(p =>
+          p.name.toLowerCase().includes(cleanQuery) ||
+          p.brand.toLowerCase().includes(cleanQuery) ||
+          p.category.toLowerCase().includes(cleanQuery)
+        )
+      : products.slice(0, 15);
+  }, [cleanQuery, products]);
 
-  const matchingCustomFoods: CustomFoodItem[] = cleanQuery
-    ? customFoods.filter(cf =>
-        cf.name.toLowerCase().includes(cleanQuery) ||
-        (cf.notes && cf.notes.toLowerCase().includes(cleanQuery))
-      )
-    : customFoods;
+  const matchingCustomFoods: CustomFoodItem[] = useMemo(() => {
+    return cleanQuery
+      ? customFoods.filter(cf =>
+          cf.name.toLowerCase().includes(cleanQuery) ||
+          (cf.notes && cf.notes.toLowerCase().includes(cleanQuery))
+        )
+      : customFoods;
+  }, [cleanQuery, customFoods]);
 
   const handleOpenInlineAdd = (type: MealType) => {
     if (!hasFeature('meal_logging')) {
@@ -1011,7 +1026,7 @@ export function TrackerView() {
                             }`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <img
+                              <img loading="lazy"
                                 src={p.imageUrl}
                                 alt={p.name}
                                 className="w-9 h-9 rounded-xl object-cover bg-zinc-100 shrink-0 border border-zinc-100"

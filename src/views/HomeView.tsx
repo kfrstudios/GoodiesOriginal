@@ -34,17 +34,26 @@ export function HomeView() {
     toggleTheme
   } = useApp();
 
-  const totalCalories = todayMeals.reduce((sum, m) => sum + m.calories, 0);
-  const totalProtein = todayMeals.reduce((sum, m) => sum + m.protein, 0);
-  const remainingCalories = Math.max(0, user.dailyGoals.calories - totalCalories);
-  const calPercent = Math.min(100, Math.round((totalCalories / user.dailyGoals.calories) * 100));
-  const waterPercent = Math.min(100, Math.round((waterIntakeMl / user.dailyGoals.water) * 100));
-  const proteinPercent = Math.min(100, Math.round((totalProtein / user.dailyGoals.protein) * 100));
+  const { totalCalories, totalProtein, remainingCalories, calPercent, waterPercent, proteinPercent } = useMemo(() => {
+    const calories = todayMeals.reduce((sum, m) => sum + m.calories, 0);
+    const protein = todayMeals.reduce((sum, m) => sum + m.protein, 0);
+    return {
+      totalCalories: calories,
+      totalProtein: protein,
+      remainingCalories: Math.max(0, user.dailyGoals.calories - calories),
+      calPercent: Math.min(100, Math.round((calories / user.dailyGoals.calories) * 100)),
+      waterPercent: Math.min(100, Math.round((waterIntakeMl / user.dailyGoals.water) * 100)),
+      proteinPercent: Math.min(100, Math.round((protein / user.dailyGoals.protein) * 100))
+    };
+  }, [todayMeals, user.dailyGoals, waterIntakeMl]);
+
   const isPro = effectiveTier === 'PRO';
   const scanStatus = canPerformScan();
 
   // Top recommendations from products with score >= 88
-  const topPicks = products.filter(p => p.goodiesScore >= 88).slice(0, 4);
+  const topPicks = useMemo(() => {
+    return products.filter(p => p.goodiesScore >= 88).slice(0, 4);
+  }, [products]);
 
   // Derive the 2 newest scans dynamically from synchronized scanHistory
   const recentScans = useMemo(() => {
@@ -367,11 +376,11 @@ export function HomeView() {
               className="bg-white p-3.5 rounded-2xl border border-zinc-200/80 shadow-sm text-left hover:border-emerald-300 transition-all flex flex-col justify-between group"
             >
               <div className="relative w-full h-28 bg-zinc-100 rounded-xl overflow-hidden mb-2.5">
-                <img
+                <img loading="lazy"
                   src={pick.imageUrl}
                   alt={pick.name}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  loading="lazy"
+
                 />
                 <div className="absolute top-2 right-2 bg-emerald-500 text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full shadow-sm">
                   <AnimatedCounter value={pick.goodiesScore} />
