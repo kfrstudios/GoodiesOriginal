@@ -58,7 +58,7 @@ function AppContent() {
   // Login & Registration view
   if (appAuthState === 'LOGIN') {
     return (
-      <main className="min-h-screen bg-[#FAF9F6] text-zinc-900">
+      <main className="min-h-screen bg-[#FAF9F6] dark:bg-[#101216] text-zinc-900 dark:text-zinc-100">
         <AuthView onAuthSuccess={handleAuthSuccess} />
         <Toast />
       </main>
@@ -68,7 +68,7 @@ function AppContent() {
   // First-time onboarding view
   if (appAuthState === 'ONBOARDING') {
     return (
-      <main className="min-h-screen bg-[#FAF9F6] text-zinc-900">
+      <main className="min-h-screen bg-[#FAF9F6] dark:bg-[#101216] text-zinc-900 dark:text-zinc-100">
         <OnboardingView 
           initialName={user.displayName || user.name} 
           onComplete={completeOnboarding} 
@@ -81,7 +81,7 @@ function AppContent() {
   // Error fallback
   if (appAuthState === 'ERROR') {
     return (
-      <main className="min-h-screen bg-[#FAF9F6] text-zinc-900 flex items-center justify-center p-4">
+      <main className="min-h-screen bg-[#FAF9F6] dark:bg-[#101216] text-zinc-900 dark:text-zinc-100 flex items-center justify-center p-4">
         <div className="bg-white rounded-3xl p-6 max-w-sm w-full border border-zinc-200 text-center space-y-4 shadow-sm">
           <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto font-black text-lg">
             !
@@ -121,7 +121,7 @@ function AppContent() {
   // Admin Hub has its own full-screen management layout
   if (activeView === 'admin') {
     return (
-      <main className="min-h-screen bg-[#FAF9F6] text-zinc-900">
+      <main className="min-h-screen bg-[#FAF9F6] dark:bg-[#101216] text-zinc-900 dark:text-zinc-100">
         <AdminView />
         <Toast />
       </main>
@@ -129,7 +129,7 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FAF9F6] text-zinc-900 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
+    <div className="min-h-screen bg-[#FAF9F6] dark:bg-[#101216] text-zinc-900 dark:text-zinc-100 flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
       <Header />
 
       <main className="flex-1 w-full max-w-2xl mx-auto px-1 sm:px-4 pt-3">

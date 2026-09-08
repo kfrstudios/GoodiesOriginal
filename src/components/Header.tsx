@@ -8,7 +8,7 @@ export function Header() {
   const isPro = effectiveTier === 'PRO';
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FAF9F6]/90 backdrop-blur-md border-b border-zinc-200/60 px-4 py-3">
+    <header className="sticky top-0 z-40 bg-[#FAF9F6]/90 dark:bg-[#101216]/90 backdrop-blur-md border-b border-zinc-200/60 dark:border-zinc-800/60 px-4 py-3">
       <div className="max-w-4xl mx-auto flex items-center justify-between">
         {/* Brand */}
         <button
@@ -21,7 +21,7 @@ export function Header() {
           </div>
           <div>
             <div className="flex items-center gap-1">
-              <span className="font-extrabold text-lg tracking-tight text-zinc-900 leading-none">
+              <span className="font-extrabold text-lg tracking-tight text-zinc-900 dark:text-zinc-100 leading-none">
                 Goodies
               </span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -31,7 +31,7 @@ export function Header() {
                 </div>
               )}
             </div>
-            <p className="text-[11px] font-medium text-zinc-400 leading-none mt-0.5">
+            <p className="text-[11px] font-medium text-zinc-400 dark:text-zinc-400 leading-none mt-0.5">
               Food & Nutrition
             </p>
           </div>
@@ -46,7 +46,7 @@ export function Header() {
           <button
             type="button"
             onClick={toggleTheme}
-            className="p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all"
+            className="p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-all"
             title={isDarkMode ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'}
             aria-label={isDarkMode ? 'Zu hellem Modus wechseln' : 'Zu dunklem Modus wechseln'}
           >
@@ -61,7 +61,7 @@ export function Header() {
             <button
               type="button"
               onClick={() => setActiveView('search')}
-              className="p-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-colors"
+              className="p-2 text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
               title="Produkte suchen"
             >
               <Search className="w-5 h-5" />
@@ -84,8 +84,8 @@ export function Header() {
               onClick={() => setActiveView(activeView === 'admin' ? 'home' : 'admin')}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border transition-all ${
                 activeView === 'admin'
-                  ? 'bg-zinc-900 text-white border-zinc-900'
-                  : 'bg-white text-zinc-600 border-zinc-200 hover:bg-zinc-50'
+                  ? 'bg-zinc-900 dark:bg-zinc-100 text-white dark:text-zinc-900 border-zinc-900 dark:border-zinc-100'
+                  : 'bg-white dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-zinc-700'
               }`}
             >
               <Shield className="w-3.5 h-3.5 text-emerald-500" />

@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from 'react';
+import { useState, useEffect, FormEvent, useMemo } from 'react';
 import { 
   Flame, 
   Droplets, 
@@ -98,26 +98,37 @@ export function TrackerView() {
   const [customFormFat, setCustomFormFat] = useState<string>('');
   const [customFormNotes, setCustomFormNotes] = useState<string>('');
 
-  const totalCalories = todayMeals.reduce((sum, m) => sum + m.calories, 0);
-  const totalProtein = todayMeals.reduce((sum, m) => sum + m.protein, 0);
-  const totalCarbs = todayMeals.reduce((sum, m) => sum + m.carbs, 0);
-  const totalFat = todayMeals.reduce((sum, m) => sum + m.fat, 0);
+  const { totalCalories, totalProtein, totalCarbs, totalFat, totalSugar, totalSalt, remainingCalories, calPercent } = useMemo(() => {
+    let calories = 0, protein = 0, carbs = 0, fat = 0, sugar = 0, salt = 0;
+    
+    // Create a lookup map for faster product resolution
+    const productsMap = new Map(products.map(p => [p.id, p]));
+    const productsNameMap = new Map(products.map(p => [p.name, p]));
 
-  // Calculate estimated sugar & salt from products in todayMeals
-  const totalSugar = todayMeals.reduce((sum, m) => {
-    const prod = products.find(p => p.id === m.productId || p.name === m.productName);
-    if (!prod) return sum;
-    return sum + (prod.nutritionPer100g.sugars * m.portionGrams) / 100;
-  }, 0);
+    for (const m of todayMeals) {
+      calories += m.calories;
+      protein += m.protein;
+      carbs += m.carbs;
+      fat += m.fat;
 
-  const totalSalt = todayMeals.reduce((sum, m) => {
-    const prod = products.find(p => p.id === m.productId || p.name === m.productName);
-    if (!prod) return sum;
-    return sum + (prod.nutritionPer100g.salt * m.portionGrams) / 100;
-  }, 0);
+      const prod = productsMap.get(m.productId) || productsNameMap.get(m.productName);
+      if (prod) {
+        sugar += (prod.nutritionPer100g.sugars * m.portionGrams) / 100;
+        salt += (prod.nutritionPer100g.salt * m.portionGrams) / 100;
+      }
+    }
 
-  const remainingCalories = user.dailyGoals.calories - totalCalories;
-  const calPercent = Math.min(100, Math.round((totalCalories / user.dailyGoals.calories) * 100));
+    return {
+      totalCalories: calories,
+      totalProtein: protein,
+      totalCarbs: carbs,
+      totalFat: fat,
+      totalSugar: sugar,
+      totalSalt: salt,
+      remainingCalories: user.dailyGoals.calories - calories,
+      calPercent: Math.min(100, Math.round((calories / user.dailyGoals.calories) * 100))
+    };
+  }, [todayMeals, products, user.dailyGoals.calories]);
 
   const mealCategories: { type: MealType; label: string; icon: string }[] = [
     { type: 'breakfast', label: 'Frühstück', icon: '☕' },
@@ -140,20 +151,24 @@ export function TrackerView() {
   // Autocomplete / Search filters
   const cleanQuery = inlineSearchQuery.trim().toLowerCase();
 
-  const matchingProducts: Product[] = cleanQuery
-    ? products.filter(p => 
-        p.name.toLowerCase().includes(cleanQuery) ||
-        p.brand.toLowerCase().includes(cleanQuery) ||
-        p.category.toLowerCase().includes(cleanQuery)
-      )
-    : products.slice(0, 15);
+  const matchingProducts: Product[] = useMemo(() => {
+    return cleanQuery
+      ? products.filter(p => 
+          p.name.toLowerCase().includes(cleanQuery) ||
+          p.brand.toLowerCase().includes(cleanQuery) ||
+          p.category.toLowerCase().includes(cleanQuery)
+        )
+      : products.slice(0, 15);
+  }, [cleanQuery, products]);
 
-  const matchingCustomFoods: CustomFoodItem[] = cleanQuery
-    ? customFoods.filter(cf =>
-        cf.name.toLowerCase().includes(cleanQuery) ||
-        (cf.notes && cf.notes.toLowerCase().includes(cleanQuery))
-      )
-    : customFoods;
+  const matchingCustomFoods: CustomFoodItem[] = useMemo(() => {
+    return cleanQuery
+      ? customFoods.filter(cf =>
+          cf.name.toLowerCase().includes(cleanQuery) ||
+          (cf.notes && cf.notes.toLowerCase().includes(cleanQuery))
+        )
+      : customFoods;
+  }, [cleanQuery, customFoods]);
 
   const handleOpenInlineAdd = (type: MealType) => {
     if (!hasFeature('meal_logging')) {
@@ -278,12 +293,12 @@ export function TrackerView() {
           </h1>
         </div>
 
-        <div className="flex bg-zinc-200/80 p-1 rounded-2xl">
+        <div className="flex bg-zinc-200/80 dark:bg-zinc-800/80 p-1 rounded-2xl">
           <button
             type="button"
             onClick={() => setActiveTab('today')}
             className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all ${
-              activeTab === 'today' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'
+              activeTab === 'today' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm' : 'text-zinc-600 dark:text-zinc-400'
             }`}
           >
             Heute
@@ -298,7 +313,7 @@ export function TrackerView() {
               }
             }}
             className={`text-xs font-bold px-3 py-1.5 rounded-xl transition-all flex items-center gap-1.5 ${
-              activeTab === 'week' ? 'bg-white text-zinc-900 shadow-sm' : 'text-zinc-600'
+              activeTab === 'week' ? 'bg-white dark:bg-zinc-700 text-zinc-900 dark:text-zinc-100 shadow-sm' : 'text-zinc-600 dark:text-zinc-400'
             }`}
           >
             <span>Woche</span>
@@ -638,26 +653,26 @@ export function TrackerView() {
       {/* ============================================================ */}
       {activeMealTypeForAdd && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex flex-col justify-end sm:items-center sm:justify-center p-0 sm:p-4">
-          <div className="bg-white rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-lg text-zinc-900 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl border border-zinc-200 animate-[slideUp_0.2s_ease-out]">
+          <div className="bg-white dark:bg-[#171a20] rounded-t-3xl sm:rounded-3xl p-5 w-full max-w-lg text-zinc-900 dark:text-zinc-100 max-h-[90vh] overflow-y-auto space-y-4 shadow-2xl border border-zinc-200 dark:border-zinc-800 animate-[slideUp_0.2s_ease-out]">
             
             {/* Modal Header */}
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+            <div className="flex items-center justify-between border-b border-zinc-100 dark:border-zinc-800 pb-3">
               <div className="flex items-center gap-2">
                 {isCustomFormOpen && (
                   <button
                     type="button"
                     onClick={() => setIsCustomFormOpen(false)}
-                    className="p-1 rounded-xl text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 transition-colors mr-1"
+                    className="p-1 rounded-xl text-zinc-400 hover:text-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 dark:hover:text-zinc-200 transition-colors mr-1"
                     title="Zurück zur Suche"
                   >
                     <ArrowLeft className="w-4 h-4" />
                   </button>
                 )}
                 <div>
-                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider block">
+                  <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider block">
                     {isCustomFormOpen ? 'Persönlicher Speicher' : 'Mahlzeit erfassen'}
                   </span>
-                  <h3 className="font-extrabold text-sm text-zinc-900">
+                  <h3 className="font-extrabold text-sm text-zinc-900 dark:text-zinc-100">
                     {isCustomFormOpen 
                       ? `Eigenes Gericht zu ${mealCategories.find(c => c.type === activeMealTypeForAdd)?.label}`
                       : `${mealCategories.find(c => c.type === activeMealTypeForAdd)?.label} hinzufügen`
@@ -1011,7 +1026,7 @@ export function TrackerView() {
                             }`}
                           >
                             <div className="flex items-center gap-2.5 min-w-0">
-                              <img
+                              <img loading="lazy"
                                 src={p.imageUrl}
                                 alt={p.name}
                                 className="w-9 h-9 rounded-xl object-cover bg-zinc-100 shrink-0 border border-zinc-100"

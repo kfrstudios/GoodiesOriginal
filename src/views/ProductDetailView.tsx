@@ -597,7 +597,7 @@ export function ProductDetailView() {
       )}
 
       {/* Sticky Bottom Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-zinc-200/80 p-3 pb-safe">
+      <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-[#171a20]/95 backdrop-blur-md border-t border-zinc-200/80 dark:border-zinc-800/80 p-3 pb-safe">
         <div className="max-w-2xl mx-auto flex items-center gap-2">
           <button
             type="button"
@@ -611,17 +611,17 @@ export function ProductDetailView() {
           <button
             type="button"
             onClick={() => openComparison(p)}
-            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 font-bold text-xs py-3.5 px-3.5 rounded-2xl flex items-center gap-1.5 active:scale-95 transition-all shadow-2xs"
+            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 dark:hover:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 font-bold text-xs py-3.5 px-3.5 rounded-2xl flex items-center gap-1.5 active:scale-95 transition-all shadow-2xs"
             title="Mit einem anderen Produkt vergleichen"
           >
-            <Scale className="w-4 h-4 text-emerald-600" />
+            <Scale className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             <span>Vergleichen</span>
           </button>
 
           <button
             type="button"
             onClick={() => setShowShoppingModal(true)}
-            className="bg-zinc-100 hover:bg-zinc-200 text-zinc-800 font-bold text-xs py-3.5 px-3.5 rounded-2xl flex items-center gap-1.5 active:scale-95 transition-all"
+            className="bg-zinc-100 hover:bg-zinc-200 text-zinc-800 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-200 font-bold text-xs py-3.5 px-3.5 rounded-2xl flex items-center gap-1.5 active:scale-95 transition-all"
             title="Zur Einkaufsliste hinzufügen"
           >
             <ListPlus className="w-4 h-4" />
@@ -633,17 +633,17 @@ export function ProductDetailView() {
       {/* Log Meal Modal */}
       {showLogModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl border border-zinc-200">
-            <h3 className="font-extrabold text-base text-zinc-900">
+          <div className="bg-white dark:bg-[#171a20] rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-extrabold text-base text-zinc-900 dark:text-zinc-100">
               Mahlzeit erfassen
             </h3>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               {p.name} ({p.brand})
             </p>
 
             <form onSubmit={handleLogSubmit} className="space-y-4">
               <div>
-                <label className="text-[11px] font-bold text-zinc-500 block mb-1.5">
+                <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400 block mb-1.5">
                   Mahlzeit-Kategorie
                 </label>
                 <div className="grid grid-cols-2 gap-2">
@@ -655,7 +655,7 @@ export function ProductDetailView() {
                       className={`text-xs font-semibold py-2 px-3 rounded-xl border transition-all ${
                         selectedMealType === m
                           ? 'bg-emerald-600 text-white border-emerald-600'
-                          : 'bg-zinc-50 text-zinc-700 border-zinc-200'
+                          : 'bg-zinc-50 dark:bg-zinc-800/80 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700'
                       }`}
                     >
                       {m === 'breakfast' && 'Frühstück'}
@@ -669,8 +669,8 @@ export function ProductDetailView() {
 
               <div>
                 <div className="flex justify-between items-center mb-1">
-                  <label className="text-[11px] font-bold text-zinc-500">Portionsgröße (g/ml)</label>
-                  <span className="text-xs font-black text-emerald-600">
+                  <label className="text-[11px] font-bold text-zinc-500 dark:text-zinc-400">Portionsgröße (g/ml)</label>
+                  <span className="text-xs font-black text-emerald-600 dark:text-emerald-400">
                     {Math.round((p.nutritionPer100g.calories * portionGrams) / 100)} kcal
                   </span>
                 </div>
@@ -681,7 +681,7 @@ export function ProductDetailView() {
                   value={portionGrams}
                   onChange={setPortionGrams}
                   placeholder="100"
-                  className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3 py-2 text-sm font-bold text-zinc-900 focus:outline-none focus:border-emerald-500"
+                  className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3 py-2 text-sm font-bold text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500"
                 />
               </div>
 
@@ -689,7 +689,7 @@ export function ProductDetailView() {
                 <button
                   type="button"
                   onClick={() => setShowLogModal(false)}
-                  className="flex-1 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-xs py-2.5 rounded-xl transition-colors"
+                  className="flex-1 bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs py-2.5 rounded-xl transition-colors"
                 >
                   Abbrechen
                 </button>
@@ -710,9 +710,9 @@ export function ProductDetailView() {
         <button
           type="button"
           onClick={() => setIsReportModalOpen(true)}
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-600 transition-colors cursor-pointer py-1.5 px-3 rounded-xl hover:bg-zinc-100"
+          className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300 transition-colors cursor-pointer py-1.5 px-3 rounded-xl hover:bg-zinc-100 dark:hover:bg-zinc-800"
         >
-          <AlertTriangle className="w-3.5 h-3.5 text-zinc-400" />
+          <AlertTriangle className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
           <span>Falsche Nährwerte oder Angaben? Produktanalyse melden</span>
         </button>
       </div>
@@ -720,11 +720,11 @@ export function ProductDetailView() {
       {/* Add to Shopping List Modal */}
       {showShoppingModal && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl border border-zinc-200">
-            <h3 className="font-extrabold text-base text-zinc-900">
+          <div className="bg-white dark:bg-[#171a20] rounded-3xl p-6 max-w-sm w-full space-y-4 shadow-xl border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100">
+            <h3 className="font-extrabold text-base text-zinc-900 dark:text-zinc-100">
               Zur Einkaufsliste hinzufügen
             </h3>
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
               Wähle eine Zielliste für „{p.name}“:
             </p>
 
@@ -737,10 +737,10 @@ export function ProductDetailView() {
                     addShoppingItem(list.id, p.name, '1x', p.id);
                     setShowShoppingModal(false);
                   }}
-                  className="w-full p-3 rounded-2xl border border-zinc-200 bg-zinc-50 hover:bg-emerald-50 hover:border-emerald-300 text-left transition-colors flex items-center justify-between"
+                  className="w-full p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/80 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:border-emerald-300 dark:hover:border-emerald-800 text-left transition-colors flex items-center justify-between"
                 >
-                  <span className="text-xs font-bold text-zinc-800">{list.title}</span>
-                  <span className="text-[10px] text-zinc-400">{list.items.length} Einträge</span>
+                  <span className="text-xs font-bold text-zinc-800 dark:text-zinc-200">{list.title}</span>
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">{list.items.length} Einträge</span>
                 </button>
               ))}
             </div>
@@ -748,7 +748,7 @@ export function ProductDetailView() {
             <button
               type="button"
               onClick={() => setShowShoppingModal(false)}
-              className="w-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-xs py-2.5 rounded-xl transition-colors"
+              className="w-full bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-700 dark:text-zinc-300 font-bold text-xs py-2.5 rounded-xl transition-colors"
             >
               Schließen
             </button>

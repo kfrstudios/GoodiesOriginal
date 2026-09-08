@@ -38,7 +38,7 @@ export function Navigation() {
       </div>
 
       {/* Untere Navigation: Exakt 5 Punkte */}
-      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 backdrop-blur-md border-t border-zinc-200/80 pb-safe">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 bg-white/95 dark:bg-[#171a20]/95 backdrop-blur-md border-t border-zinc-200/80 dark:border-zinc-800/80 pb-safe">
         <div className="max-w-md mx-auto px-4 py-1.5 flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
@@ -53,12 +53,12 @@ export function Navigation() {
                 onClick={() => setActiveView(item.view)}
                 className={`relative flex flex-col items-center py-1.5 px-3 rounded-xl transition-colors focus:outline-none ${
                   isActive
-                    ? 'text-emerald-600 font-bold'
-                    : 'text-zinc-400 hover:text-zinc-600'
+                    ? 'text-emerald-600 dark:text-emerald-400 font-bold'
+                    : 'text-zinc-400 hover:text-zinc-600 dark:text-zinc-400 dark:hover:text-zinc-200'
                 }`}
               >
                 <div className="relative">
-                  <Icon className={`w-5 h-5 transition-transform ${isActive ? 'scale-110 text-emerald-600' : ''}`} />
+                  <Icon className={`w-5 h-5 transition-transform ${isActive ? 'scale-110 text-emerald-600 dark:text-emerald-400' : ''}`} />
                   {isCenterTracker && (
                     <span className="absolute -top-0.5 -right-1 w-1.5 h-1.5 rounded-full bg-amber-500" />
                   )}
@@ -69,7 +69,7 @@ export function Navigation() {
                 {isActive && (
                   <motion.div
                     layoutId="activeTabIndicator"
-                    className="absolute -bottom-1 w-1 h-1 rounded-full bg-emerald-600"
+                    className="absolute -bottom-1 w-1 h-1 rounded-full bg-emerald-600 dark:bg-emerald-400"
                     transition={{ type: 'spring', damping: 26, stiffness: 350 }}
                   />
                 )}

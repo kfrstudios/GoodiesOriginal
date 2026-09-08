@@ -337,6 +337,7 @@ export function ScannerView() {
       if (nativeDetectorRef.current) {
         try {
           const barcodes = await nativeDetectorRef.current.detect(video);
+          if (isCancelled) return; // Prevent state updates if component unmounted
           if (barcodes && barcodes.length > 0 && barcodes[0].rawValue) {
             handleBarcodeDetected(barcodes[0].rawValue);
             return;
@@ -347,7 +348,7 @@ export function ScannerView() {
       }
 
       // PASS 2: ZXing MultiFormat Engine with Correct Grayscale Bitmap
-      if (zxingReaderRef.current && canvasRef.current) {
+      if (zxingReaderRef.current && canvasRef.current && !isCancelled) {
         const canvas = canvasRef.current;
         const ctx = canvas.getContext('2d', { willReadFrequently: true });
         if (ctx) {
@@ -400,6 +401,13 @@ export function ScannerView() {
     return () => {
       isCancelled = true;
       if (timerId) clearInterval(timerId);
+      
+      // Cleanup ZXing resources to prevent memory leaks and stuck video loops
+      // Since it's decoding from a canvas bitmap manually, there's no ongoing stream in zxing to stop,
+      // but we can clear the reader reference.
+      if (zxingReaderRef.current) {
+         zxingReaderRef.current = null;
+      }
     };
   }, [handleBarcodeDetected]);
 
@@ -659,13 +667,13 @@ export function ScannerView() {
             dragConstraints={{ top: 0, bottom: 0 }}
             dragElastic={0.2}
             onDragEnd={handleDragEnd}
-            className={`fixed inset-x-0 bottom-0 z-40 bg-white text-zinc-900 rounded-t-[32px] shadow-2xl border-t border-zinc-200/80 flex flex-col overflow-hidden transition-all duration-300 ${
+            className={`fixed inset-x-0 bottom-0 z-40 bg-white dark:bg-[#171a20] text-zinc-900 dark:text-zinc-100 rounded-t-[32px] shadow-2xl border-t border-zinc-200/80 dark:border-zinc-800 flex flex-col overflow-hidden transition-all duration-300 ${
               sheetMode === 'expanded' ? 'h-[88vh] max-h-[88vh]' : 'max-h-[72vh]'
             }`}
           >
             {/* Drag Handle Bar */}
             <div className="pt-3 pb-2 flex flex-col items-center cursor-grab active:cursor-grabbing shrink-0">
-              <div className="w-12 h-1.5 rounded-full bg-zinc-300" />
+              <div className="w-12 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700" />
             </div>
 
             {/* Scrollable Container */}
@@ -675,7 +683,7 @@ export function ScannerView() {
               <div className="flex gap-4 items-center">
                 {/* Kontrollierter Produktbild-Container: Ragt nie heraus, blockiert keine Buttons */}
                 <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-zinc-50 overflow-hidden shrink-0 border border-zinc-200/70 relative p-1.5 flex items-center justify-center">
-                  <img
+                  <img loading="lazy"
                     src={detectedProduct.imageUrl}
                     alt={detectedProduct.name}
                     className="w-full h-full object-contain"
@@ -956,7 +964,7 @@ export function ScannerView() {
                             className="bg-zinc-50 hover:bg-zinc-100 p-3 rounded-2xl border border-zinc-200/80 flex items-center justify-between cursor-pointer transition-colors"
                           >
                             <div className="flex items-center gap-3">
-                              <img src={alt.imageUrl} alt={alt.name} className="w-10 h-10 object-contain rounded-xl bg-white p-1 border" />
+                              <img loading="lazy" src={alt.imageUrl} alt={alt.name} className="w-10 h-10 object-contain rounded-xl bg-white p-1 border" />
                               <div>
                                 <span className="font-bold text-xs text-zinc-900 block">{alt.name}</span>
                                 <span className="text-[10px] text-zinc-400">{alt.brand}</span>
@@ -1041,25 +1049,25 @@ export function ScannerView() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 280 }}
-            className="fixed inset-x-0 bottom-0 z-40 bg-white text-zinc-900 rounded-t-[32px] p-6 shadow-2xl border-t border-zinc-200 max-w-lg mx-auto space-y-4"
+            className="fixed inset-x-0 bottom-0 z-40 bg-white dark:bg-[#171a20] text-zinc-900 dark:text-zinc-100 rounded-t-[32px] p-6 shadow-2xl border-t border-zinc-200 dark:border-zinc-800 max-w-lg mx-auto space-y-4"
           >
-            <div className="w-12 h-1.5 rounded-full bg-zinc-300 mx-auto" />
+            <div className="w-12 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 mx-auto" />
 
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center border border-amber-200 shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 flex items-center justify-center border border-amber-200 dark:border-amber-800/60 shrink-0">
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <div>
-                <h3 className="text-base font-black text-zinc-900">
+                <h3 className="text-base font-black text-zinc-900 dark:text-zinc-100">
                   Produkt noch nicht in Goodies
                 </h3>
-                <p className="text-xs text-zinc-500">
-                  Barcode <span className="font-mono font-bold text-zinc-700">{unresolvedBarcode}</span> wurde erfolgreich erkannt.
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  Barcode <span className="font-mono font-bold text-zinc-700 dark:text-zinc-300">{unresolvedBarcode}</span> wurde erfolgreich erkannt.
                 </p>
               </div>
             </div>
 
-            <p className="text-xs text-zinc-600 leading-relaxed bg-zinc-50 p-3 rounded-2xl border border-zinc-200">
+            <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed bg-zinc-50 dark:bg-zinc-800/60 p-3 rounded-2xl border border-zinc-200 dark:border-zinc-700">
               Dieser Barcode wurde erkannt, aber wir kennen das Produkt noch nicht. Hilf der Community und reiche das Produkt ein!
             </p>
 
@@ -1069,7 +1077,7 @@ export function ScannerView() {
                 placeholder="Optional: Produktname oder Marke..."
                 value={reportNotes}
                 onChange={(e) => setReportNotes(e.target.value)}
-                className="w-full bg-zinc-50 border border-zinc-200 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl px-3.5 py-2.5 text-xs text-zinc-900 dark:text-zinc-100 focus:outline-none focus:border-emerald-500"
               />
 
               <div className="grid grid-cols-2 gap-2 pt-1">
@@ -1084,7 +1092,7 @@ export function ScannerView() {
                 <button
                   type="button"
                   onClick={resumeScanning}
-                  className="bg-zinc-100 hover:bg-zinc-200 active:scale-98 text-zinc-800 font-bold text-xs py-3 rounded-2xl border border-zinc-200 transition-all"
+                  className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 active:scale-98 text-zinc-800 dark:text-zinc-200 font-bold text-xs py-3 rounded-2xl border border-zinc-200 dark:border-zinc-700 transition-all"
                 >
                   Weiter scannen
                 </button>
@@ -1105,17 +1113,17 @@ export function ScannerView() {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 25, stiffness: 280 }}
-            className="fixed inset-x-0 bottom-0 z-40 bg-white text-zinc-900 rounded-t-[32px] p-6 shadow-2xl border-t border-zinc-200 max-w-lg mx-auto space-y-4 text-center"
+            className="fixed inset-x-0 bottom-0 z-40 bg-white dark:bg-[#171a20] text-zinc-900 dark:text-zinc-100 rounded-t-[32px] p-6 shadow-2xl border-t border-zinc-200 dark:border-zinc-800 max-w-lg mx-auto space-y-4 text-center"
           >
-            <div className="w-12 h-1.5 rounded-full bg-zinc-300 mx-auto" />
-            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center border border-rose-200 mx-auto">
+            <div className="w-12 h-1.5 rounded-full bg-zinc-300 dark:bg-zinc-700 mx-auto" />
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 flex items-center justify-center border border-rose-200 dark:border-rose-800/60 mx-auto">
               <AlertTriangle className="w-6 h-6" />
             </div>
 
-            <h3 className="text-base font-black text-zinc-900">
+            <h3 className="text-base font-black text-zinc-900 dark:text-zinc-100">
               Produkt konnte gerade nicht geladen werden.
             </h3>
-            <p className="text-xs text-zinc-500 max-w-xs mx-auto">
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-xs mx-auto">
               Der Barcode ({unresolvedBarcode}) wurde erkannt, aber die Verbindung konnte nicht hergestellt werden.
             </p>
 
@@ -1149,25 +1157,25 @@ export function ScannerView() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl text-zinc-900"
+              className="bg-white dark:bg-[#171a20] rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <Flame className="w-5 h-5 text-amber-500" />
-                  <h3 className="font-black text-base text-zinc-900">Zu heute hinzufügen</h3>
+                  <h3 className="font-black text-base text-zinc-900 dark:text-zinc-100">Zu heute hinzufügen</h3>
                 </div>
-                <button type="button" onClick={() => setShowMealModal(false)} className="text-zinc-400 hover:text-zinc-600">
+                <button type="button" onClick={() => setShowMealModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300">
                   <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <p className="text-xs text-zinc-500 font-medium">
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">
                 {detectedProduct.name} ({detectedProduct.brand})
               </p>
 
               <form onSubmit={handleLogMealSubmit} className="space-y-4">
                 <div>
-                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 block mb-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-400 block mb-1.5">
                     Mahlzeit auswählen
                   </label>
                   <div className="grid grid-cols-2 gap-2">
@@ -1184,7 +1192,7 @@ export function ScannerView() {
                         className={`py-2 px-3 rounded-xl text-xs font-bold border transition-all ${
                           selectedMealType === m.id
                             ? 'bg-emerald-500 text-white border-emerald-500 shadow-sm'
-                            : 'bg-zinc-50 text-zinc-700 border-zinc-200 hover:bg-zinc-100'
+                            : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-700'
                         }`}
                       >
                         {m.label}
@@ -1194,9 +1202,9 @@ export function ScannerView() {
                 </div>
 
                 <div>
-                  <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-400 mb-1.5">
+                  <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-400 mb-1.5">
                     <span>Portionsgröße</span>
-                    <span className="font-mono text-zinc-900">{portionGrams} g</span>
+                    <span className="font-mono text-zinc-900 dark:text-zinc-100">{portionGrams} g</span>
                   </div>
                   <input
                     type="range"
@@ -1207,7 +1215,7 @@ export function ScannerView() {
                     onChange={(e) => setPortionGrams(Number(e.target.value))}
                     className="w-full accent-emerald-500"
                   />
-                  <div className="flex justify-between text-[10px] text-zinc-400 font-mono mt-1">
+                  <div className="flex justify-between text-[10px] text-zinc-400 dark:text-zinc-400 font-mono mt-1">
                     <span>10g</span>
                     <span>
                       ca. {Math.round((detectedProduct.nutritionPer100g.calories * portionGrams) / 100)} kcal
@@ -1238,14 +1246,14 @@ export function ScannerView() {
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="bg-white rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl text-zinc-900"
+              className="bg-white dark:bg-[#171a20] rounded-3xl p-6 w-full max-w-md space-y-4 shadow-2xl text-zinc-900 dark:text-zinc-100 border border-zinc-200 dark:border-zinc-800"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <ListPlus className="w-5 h-5 text-emerald-600" />
-                  <h3 className="font-black text-base text-zinc-900">Zur Liste hinzufügen</h3>
+                  <ListPlus className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                  <h3 className="font-black text-base text-zinc-900 dark:text-zinc-100">Zur Liste hinzufügen</h3>
                 </div>
-                <button type="button" onClick={() => setShowListModal(false)} className="text-zinc-400 hover:text-zinc-600">
+                <button type="button" onClick={() => setShowListModal(false)} className="text-zinc-400 hover:text-zinc-600 dark:text-zinc-500 dark:hover:text-zinc-300">
                   <X className="w-5 h-5" />
                 </button>
               </div>
