@@ -1,0 +1,10 @@
+{
+  "name": "Goodies",
+  "description": "Moderne Food- und Nutrition-App mit Barcode-Scanner, Goodies Score, Produktdetailanalyse und Kalorientracker.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

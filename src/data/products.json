@@ -1,0 +1,319 @@
+[
+  {
+    "id": "prod_1",
+    "barcode": "4008400404127",
+    "name": "Haferdrink Ohne Zucker",
+    "brand": "Oatly",
+    "category": "Pflanzliche Milchalternativen",
+    "quantity": "1000 ml",
+    "imageUrl": "https://images.unsplash.com/photo-1550583724-b2692b85b150?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 92,
+    "nutriScore": "A",
+    "novaScore": 1,
+    "nutritionPer100g": {
+      "calories": 37,
+      "fat": 0.5,
+      "saturatedFat": 0.1,
+      "carbohydrates": 6.7,
+      "sugars": 0.0,
+      "fiber": 0.8,
+      "protein": 1.0,
+      "salt": 0.10
+    },
+    "ingredients": "Wasser, Hafer (10%), Meersalz.",
+    "additives": [],
+    "allergens": ["Hafer (Gluten)"],
+    "labels": ["Bio", "Vegan", "Ohne Zuckerzusatz", "Ballaststoffquelle"],
+    "pros": [
+      "0g Zuckerzusatz",
+      "Geringer Gehalt an gesättigten Fetten",
+      "Keine bedenklichen Zusatzstoffe",
+      "Nachhaltig produziert"
+    ],
+    "cons": [
+      "Geringerer Proteingehalt als Kuhmilch"
+    ],
+    "healthVerdict": "Hervorragende pflanzliche Milchalternative ohne versteckte Zucker oder Emulgatoren.",
+    "betterAlternatives": []
+  },
+  {
+    "id": "prod_2",
+    "barcode": "5201051001085",
+    "name": "Total Griechischer Joghurt 0%",
+    "brand": "FAGE",
+    "category": "Milchprodukte & Joghurt",
+    "quantity": "500 g",
+    "imageUrl": "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 95,
+    "nutriScore": "A",
+    "novaScore": 1,
+    "nutritionPer100g": {
+      "calories": 54,
+      "fat": 0.0,
+      "saturatedFat": 0.0,
+      "carbohydrates": 3.0,
+      "sugars": 3.0,
+      "fiber": 0.0,
+      "protein": 10.3,
+      "salt": 0.10
+    },
+    "ingredients": "Pasteurisierte Magermilch, lebende Joghurtkulturen.",
+    "additives": [],
+    "allergens": ["Milch (Laktose)"],
+    "labels": ["High Protein", "0% Fett", "Ohne Zuckerzusatz", "Vegetarisch"],
+    "pros": [
+      "Extrem hoher Proteingehalt (10,3g)",
+      "0% Fett und keine künstlichen Zusätze",
+      "Lebende probiotische Joghurtkulturen"
+    ],
+    "cons": [
+      "Enthält natürliche Laktose"
+    ],
+    "healthVerdict": "Hervorragende Proteinquelle mit natürlichen Milchsäurebakterien für die Darmflora.",
+    "betterAlternatives": []
+  },
+  {
+    "id": "prod_3",
+    "barcode": "8076809513753",
+    "name": "Vollkorn Penne Rigate Integrale",
+    "brand": "Barilla",
+    "category": "Teigwaren & Getreide",
+    "quantity": "500 g",
+    "imageUrl": "https://images.unsplash.com/photo-1551462147-ff29053bfc14?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 90,
+    "nutriScore": "A",
+    "novaScore": 1,
+    "nutritionPer100g": {
+      "calories": 350,
+      "fat": 2.5,
+      "saturatedFat": 0.5,
+      "carbohydrates": 65.7,
+      "sugars": 3.5,
+      "fiber": 8.0,
+      "protein": 13.0,
+      "salt": 0.01
+    },
+    "ingredients": "Vollkorn-Hartweizengrieß, Wasser.",
+    "additives": [],
+    "allergens": ["Weizen (Gluten)"],
+    "labels": ["100% Vollkorn", "Reich an Ballaststoffen", "Vegan"],
+    "pros": [
+      "Hoher Ballaststoffgehalt (8g pro 100g)",
+      "Komplexe Kohlenhydrate für langanhaltende Sättigung",
+      "Sehr geringer Salzgehalt"
+    ],
+    "cons": [
+      "Enthält Weizengluten"
+    ],
+    "healthVerdict": "Sehr empfehlenswerte Vollkorn-Kohlenhydratquelle mit stabilem Blutzuckerverlauf.",
+    "betterAlternatives": []
+  },
+  {
+    "id": "prod_4",
+    "barcode": "8719883220015",
+    "name": "Zartbitter Schokolade 70%",
+    "brand": "Tony's Chocolonely",
+    "category": "Süßwaren & Snacks",
+    "quantity": "180 g",
+    "imageUrl": "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 68,
+    "nutriScore": "D",
+    "novaScore": 3,
+    "nutritionPer100g": {
+      "calories": 570,
+      "fat": 42.0,
+      "saturatedFat": 25.0,
+      "carbohydrates": 35.0,
+      "sugars": 31.0,
+      "fiber": 10.0,
+      "protein": 7.5,
+      "salt": 0.02
+    },
+    "ingredients": "Kakaomasse, Zucker, Kakaobutter, fettarmes Kakaopulver, Emulgator (Sojalecithin).",
+    "additives": [
+      {
+        "code": "E322",
+        "name": "Lecithine (Soja)",
+        "risk": "safe",
+        "note": "Pflanzlicher Emulgator, gesundheitlich unbedenklich."
+      }
+    ],
+    "allergens": ["Soja", "Kann Spuren von Milch und Schalenfrüchten enthalten"],
+    "labels": ["Fairtrade", "Vegan", "70% Kakao"],
+    "pros": [
+      "Hoher Kakaoanteil mit Antioxidantien",
+      "100% sklavenfreie Kakaolieferkette",
+      "10g Ballaststoffe"
+    ],
+    "cons": [
+      "Hohe Kalorien- und Fett-Dichte",
+      "Hoher Gehalt an gesättigten Fettsäuren"
+    ],
+    "healthVerdict": "Hochwertige Schokolade für bewussten Genuss in moderaten Mengen.",
+    "betterAlternatives": []
+  },
+  {
+    "id": "prod_5",
+    "barcode": "4005500058514",
+    "name": "Bio Linsenwaffeln Meersalz",
+    "brand": "dmBio",
+    "category": "Knabbergebäck & Snacks",
+    "quantity": "100 g",
+    "imageUrl": "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 88,
+    "nutriScore": "A",
+    "novaScore": 2,
+    "nutritionPer100g": {
+      "calories": 382,
+      "fat": 3.8,
+      "saturatedFat": 0.5,
+      "carbohydrates": 56.0,
+      "sugars": 1.2,
+      "fiber": 11.0,
+      "protein": 25.0,
+      "salt": 0.85
+    },
+    "ingredients": "Rote Linsenmehl* 99%, Meersalz 1%. *aus biologischer Landwirtschaft.",
+    "additives": [],
+    "allergens": ["Kann Spuren von Sesam und Soja enthalten"],
+    "labels": ["Bio", "Vegan", "Glutenfrei", "High Protein"],
+    "pros": [
+      "Hervorragende 25g pflanzliches Protein",
+      "Reich an Ballaststoffen (11g)",
+      "Sehr geringer Zuckeranteil"
+    ],
+    "cons": [
+      "Mäßiger Salzgehalt"
+    ],
+    "healthVerdict": "Exzellente knusprige und proteinreiche Alternative zu herkömmlichen Kartoffelchips.",
+    "betterAlternatives": []
+  },
+  {
+    "id": "prod_6",
+    "barcode": "90162602",
+    "name": "Energy Drink Original",
+    "brand": "Red Bull",
+    "category": "Alkoholfreie Getränke",
+    "quantity": "250 ml",
+    "imageUrl": "https://images.unsplash.com/photo-1622543925917-763c34d1a86e?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 24,
+    "nutriScore": "E",
+    "novaScore": 4,
+    "nutritionPer100g": {
+      "calories": 46,
+      "fat": 0.0,
+      "saturatedFat": 0.0,
+      "carbohydrates": 11.0,
+      "sugars": 11.0,
+      "fiber": 0.0,
+      "protein": 0.0,
+      "salt": 0.10
+    },
+    "ingredients": "Wasser, Saccharose, Glukose, Säuerungsmittel (Zitronensäure), Kohlensäure, Taurin (0,4%), Säureregulatoren (Natriumcarbonate, Magnesiumcarbonate), Koffein (0,03%), Vitamine (Niacin, Pantothensäure, B6, B12), Aromen, Farbstoffe (einfaches Zuckerkulör, Riboflavine).",
+    "additives": [
+      {
+        "code": "E150a",
+        "name": "Zuckerkulör",
+        "risk": "moderate",
+        "note": "Farbstoff, in hohen Dosen kritisch bewertet."
+      },
+      {
+        "code": "E330",
+        "name": "Zitronensäure",
+        "risk": "safe",
+        "note": "Säuerungsmittel, greift in hoher Konzentration Zahnschmelz an."
+      }
+    ],
+    "allergens": [],
+    "labels": ["Mit Koffein & Taurin"],
+    "pros": [
+      "Enthält B-Vitamine"
+    ],
+    "cons": [
+      "Sehr hoher Zuckergehalt (27g pro Dose)",
+      "Ultra-hochverarbeitet (Nova 4)",
+      "Koffeingehalt für Kinder und Schwangere ungeeignet"
+    ],
+    "healthVerdict": "Stark zuckerhaltiges, ultra-verarbeitetes Lifestyle-Getränk. Nicht für den täglichen Konsum empfohlen.",
+    "betterAlternatives": ["prod_1"]
+  },
+  {
+    "id": "prod_7",
+    "barcode": "50201600",
+    "name": "Knuspermüsli Schoko & Banane",
+    "brand": "Crunchy Morning",
+    "category": "Frühstückscerealien",
+    "quantity": "375 g",
+    "imageUrl": "https://images.unsplash.com/photo-1517093707579-37f2ee608827?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 45,
+    "nutriScore": "C",
+    "novaScore": 4,
+    "nutritionPer100g": {
+      "calories": 445,
+      "fat": 15.2,
+      "saturatedFat": 6.8,
+      "carbohydrates": 64.0,
+      "sugars": 22.5,
+      "fiber": 6.2,
+      "protein": 8.1,
+      "salt": 0.40
+    },
+    "ingredients": "Haferflocken (48%), Glukosesirup, Palmöl, Vollmilchschokoladenstücke (8%), gezuckerte Bananenchips, Aroma.",
+    "additives": [
+      {
+        "code": "E471",
+        "name": "Mono- und Diglyceride von Speisefettsäuren",
+        "risk": "moderate",
+        "note": "Emulgator."
+      }
+    ],
+    "allergens": ["Hafer (Gluten)", "Milch", "Kann Nüsse enthalten"],
+    "labels": ["Knusprig gebacken"],
+    "pros": [
+      "Haferflocken liefern Beta-Glucane"
+    ],
+    "cons": [
+      "Hoher Zuckeranteil (22,5g pro 100g)",
+      "Verwendet Palmöl",
+      "Stark verarbeitetes Knuspermüsli"
+    ],
+    "healthVerdict": "Durch den hohen Zucker- und Fettzusatz eher eine Süßigkeit als ein gesundes Frühstück.",
+    "betterAlternatives": ["prod_3", "prod_2"]
+  },
+  {
+    "id": "prod_8",
+    "barcode": "4014400923766",
+    "name": "Bio Nuss- & Beeren-Mix",
+    "brand": "Alnatura",
+    "category": "Nüsse & Trockenfrüchte",
+    "quantity": "200 g",
+    "imageUrl": "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=600&q=80",
+    "goodiesScore": 89,
+    "nutriScore": "B",
+    "novaScore": 1,
+    "nutritionPer100g": {
+      "calories": 480,
+      "fat": 31.0,
+      "saturatedFat": 3.8,
+      "carbohydrates": 38.0,
+      "sugars": 31.0,
+      "fiber": 7.5,
+      "protein": 11.2,
+      "salt": 0.02
+    },
+    "ingredients": "Walnusskerne* (25%), Mandeln* geröstet (25%), Cashewkerne* (25%), Cranberries* getrocknet (15%), Apfeldicksaft*, Sonnenblumenöl*. *aus kontrolliert biologischem Anbau.",
+    "additives": [],
+    "allergens": ["Walnüsse", "Mandeln", "Cashewkerne"],
+    "labels": ["Bio", "Vegan", "Ohne Konservierungsstoffe"],
+    "pros": [
+      "Wertvolle ungesättigte Omega-3 & Omega-6 Fettsäuren",
+      "Naturbelassene Nüsse ohne Röstfett",
+      "Gute pflanzliche Proteinquelle"
+    ],
+    "cons": [
+      "Fruchtzucker aus getrockneten Beeren"
+    ],
+    "healthVerdict": "Sehr gesunder Snack für Gehirn und Herz mit gesunden Pflanzenfetten.",
+    "betterAlternatives": []
+  }
+]

@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Smooth transition for theme switching */
+html, body {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ============================================================
+   GOODIES DYNAMIC DARK MODE SYSTEM
+   Crafted with sophisticated cool neutrals & WCAG AA compliance
+   ============================================================ */
+
+html.dark,
+.dark {
+  color-scheme: dark;
+}
+
+/* Backgrounds */
+.dark body {
+  background-color: #101216 !important;
+  color: #f3f4f6 !important;
+}
+
+.dark .bg-\[\#FAF9F6\] {
+  background-color: #101216 !important;
+}
+
+.dark .bg-\[\#FAF9F6\]\/90 {
+  background-color: rgba(16, 18, 22, 0.92) !important;
+}
+
+.dark .bg-white {
+  background-color: #171a20 !important;
+}
+
+.dark .bg-white\/95 {
+  background-color: rgba(23, 26, 32, 0.95) !important;
+}
+
+.dark .bg-white\/90 {
+  background-color: rgba(23, 26, 32, 0.9) !important;
+}
+
+.dark .bg-white\/80 {
+  background-color: rgba(23, 26, 32, 0.8) !important;
+}
+
+.dark .bg-zinc-50 {
+  background-color: #13161b !important;
+}
+
+.dark .bg-zinc-100 {
+  background-color: #1f232c !important;
+}
+
+.dark .bg-zinc-200 {
+  background-color: #292f3b !important;
+}
+
+.dark .bg-zinc-900 {
+  background-color: #262c36 !important;
+}
+
+/* Text Colors */
+.dark .text-zinc-900 {
+  color: #f3f4f6 !important;
+}
+
+.dark .text-zinc-800 {
+  color: #e5e7eb !important;
+}
+
+.dark .text-zinc-700 {
+  color: #d1d5db !important;
+}
+
+.dark .text-zinc-600 {
+  color: #9ca3af !important;
+}
+
+.dark .text-zinc-500 {
+  color: #8892a0 !important;
+}
+
+.dark .text-zinc-400 {
+  color: #6b7584 !important;
+}
+
+/* Borders & Dividers */
+.dark .border-zinc-200,
+.dark .border-zinc-200\/80,
+.dark .border-zinc-200\/60,
+.dark .border-zinc-200\/50,
+.dark .border-zinc-200\/40,
+.dark .border-zinc-200\/30 {
+  border-color: #262c36 !important;
+}
+
+.dark .border-zinc-100 {
+  border-color: #1e222a !important;
+}
+
+.dark .border-zinc-300 {
+  border-color: #333a46 !important;
+}
+
+.dark .divide-zinc-200 > :not([hidden]) ~ :not([hidden]),
+.dark .divide-zinc-100 > :not([hidden]) ~ :not([hidden]) {
+  border-color: #262c36 !important;
+}
+
+/* Interactive Hover States */
+.dark .hover\:bg-zinc-50:hover {
+  background-color: #1a1e26 !important;
+}
+
+.dark .hover\:bg-zinc-100:hover {
+  background-color: #252b36 !important;
+}
+
+.dark .hover\:bg-white:hover {
+  background-color: #212630 !important;
+}
+
+.dark .hover\:text-zinc-900:hover,
+.dark .hover\:text-zinc-800:hover,
+.dark .hover\:text-zinc-700:hover,
+.dark .hover\:text-zinc-600:hover {
+  color: #ffffff !important;
+}
+
+/* Form Inputs & Controls */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.dark textarea,
+.dark select {
+  background-color: #171a20;
+  color: #f3f4f6;
+  border-color: #2c323e;
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+  color: #6b7584;
+}
+
+/* Accent Badges in Dark Mode */
+.dark .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.14) !important;
+  color: #6ee7b7 !important;
+}
+.dark .text-emerald-900,
+.dark .text-emerald-800 {
+  color: #6ee7b7 !important;
+}
+
+.dark .bg-amber-50 {
+  background-color: rgba(245, 158, 11, 0.14) !important;
+  color: #fcd34d !important;
+}
+.dark .text-amber-900,
+.dark .text-amber-800 {
+  color: #fcd34d !important;
+}
+
+.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.14) !important;
+  color: #fda4af !important;
+}
+.dark .text-rose-900,
+.dark .text-rose-800 {
+  color: #fda4af !important;
+}
+
+.dark .bg-blue-50 {
+  background-color: rgba(59, 130, 246, 0.14) !important;
+  color: #93c5fd !important;
+}
+
+.dark .bg-indigo-50 {
+  background-color: rgba(99, 102, 241, 0.14) !important;
+  color: #a5b4fc !important;
+}
+
+.dark .bg-cyan-50 {
+  background-color: rgba(6, 182, 212, 0.14) !important;
+  color: #67e8f9 !important;
+}
+.dark .text-cyan-900,
+.dark .text-cyan-800,
+.dark .text-cyan-700 {
+  color: #67e8f9 !important;
+}
+
+.dark .bg-purple-50 {
+  background-color: rgba(168, 85, 247, 0.14) !important;
+  color: #d8b4fe !important;
+}
+.dark .text-purple-900,
+.dark .text-purple-800,
+.dark .text-purple-700 {
+  color: #d8b4fe !important;
+}
+
+/* Shadows in Dark Mode */
+.dark .shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.35) !important;
+}
+.dark .shadow-md {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.45) !important;
+}
+.dark .shadow-lg,
+.dark .shadow-xl,
+.dark .shadow-2xl {
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.65) !important;
+}
+
+@keyframes goldShimmer {
+  0% {
+    transform: translateX(-180%) skewX(-20deg);
+  }
+  30%, 100% {
+    transform: translateX(260%) skewX(-20deg);
+  }
+}
+
+.animate-gold-shimmer {
+  animation: goldShimmer 3.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+@keyframes goldPulseGlow {
+  0%, 100% {
+    opacity: 0.9;
+    filter: drop-shadow(0 0 1px rgba(245, 158, 11, 0.4));
+  }
+  50% {
+    opacity: 1;
+    filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.7));
+  }
+}
+
+.animate-gold-glow {
+  animation: goldPulseGlow 2.8s ease-in-out infinite;
+}

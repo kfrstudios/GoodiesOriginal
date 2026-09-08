@@ -1,0 +1,12 @@
+{
+  "projectId": "goodies-food-scanner",
+  "appId": "1:7740845706:web:e398940897cfc0cb618773",
+  "apiKey": "AIzaSyAmlZ2RA79LZGrlVK0XNmqcMaPGHjSPHJI",
+  "authDomain": "goodies-food-scanner.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "goodies-food-scanner.firebasestorage.app",
+  "messagingSenderId": "7740845706",
+  "measurementId": "",
+  "oAuthClientId": "7740845706-tja6mclctmprad955g7gm8p67n3mqa9r.apps.googleusercontent.com",
+  "recaptchaSiteKey": ""
+}

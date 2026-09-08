@@ -1,0 +1,106 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile document containing authentication details, dietary preferences, and targets",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 512 },
+        "authProvider": { "type": "string", "maxLength": 64 },
+        "subscriptionTier": { "type": "string", "enum": ["FREE", "PRO"] },
+        "onboardingCompleted": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["uid", "email", "subscriptionTier"]
+    },
+    "FavoriteItem": {
+      "title": "FavoriteItem",
+      "description": "User saved favorite product reference",
+      "type": "object",
+      "properties": {
+        "productId": { "type": "string", "maxLength": 128 },
+        "addedAt": { "type": "string" }
+      },
+      "required": ["productId"]
+    },
+    "ShoppingList": {
+      "title": "ShoppingList",
+      "description": "User personal shopping list",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["id", "title"]
+    },
+    "ScanHistory": {
+      "title": "ScanHistory",
+      "description": "User scan log record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "productId": { "type": "string", "maxLength": 128 },
+        "barcode": { "type": "string", "maxLength": 64 },
+        "scannedAt": { "type": "string" }
+      },
+      "required": ["id", "productId", "barcode"]
+    },
+    "Product": {
+      "title": "Product",
+      "description": "Public Goodies product database item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "barcode": { "type": "string", "maxLength": 64 },
+        "name": { "type": "string", "maxLength": 256 },
+        "brand": { "type": "string", "maxLength": 128 },
+        "goodiesScore": { "type": "number" }
+      },
+      "required": ["id", "barcode", "name", "goodiesScore"]
+    },
+    "ProductSubmission": {
+      "title": "ProductSubmission",
+      "description": "Community submission for unindexed product barcodes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "barcode": { "type": "string", "maxLength": 64 },
+        "submittedBy": { "type": "string", "maxLength": 128 },
+        "reportedAt": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "resolved"] }
+      },
+      "required": ["id", "barcode", "submittedBy", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Primary user account and profile data"
+    },
+    "/users/{userId}/favorites/{favoriteId}": {
+      "schema": "FavoriteItem",
+      "description": "User favorite products"
+    },
+    "/users/{userId}/lists/{listId}": {
+      "schema": "ShoppingList",
+      "description": "User shopping lists"
+    },
+    "/users/{userId}/scanHistory/{historyId}": {
+      "schema": "ScanHistory",
+      "description": "User scan history records"
+    },
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Global verified product catalog"
+    },
+    "/product_submissions/{submissionId}": {
+      "schema": "ProductSubmission",
+      "description": "User-reported unknown barcodes"
+    }
+  }
+}

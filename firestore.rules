@@ -1,0 +1,94 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'kiwie6868@gmail.com' ||
+        request.auth.token.email == 'admin@goodies.app' ||
+        (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN') ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // User document: users/{userId}
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      
+      // Allow user creation: regular users must default to FREE and USER role
+      allow create: if (isOwner(userId) 
+        && request.resource.data.uid == userId
+        && request.resource.data.email is string
+        && (request.resource.data.subscriptionTier == 'FREE' || isAdmin())
+        && (request.resource.data.role == 'USER' || isAdmin()))
+        || isAdmin();
+
+      // Allow user updates: regular users cannot self-escalate subscriptionTier or role; admins have full update rights
+      allow update: if (isOwner(userId) 
+        && request.resource.data.uid == userId
+        && request.resource.data.subscriptionTier == resource.data.subscriptionTier
+        && (!('role' in request.resource.data) || request.resource.data.role == resource.data.role))
+        || isAdmin();
+
+      allow delete: if isOwner(userId) || isAdmin();
+
+      // Subcollections of user: favorites, lists, scanHistory, tracker, sessions
+      match /{subcollection}/{docId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // Products catalog: read published products, writes restricted to admins or authenticated imports
+    match /products/{productId} {
+      allow read: if !('status' in resource.data) || resource.data.status != 'archived' || isAdmin();
+      allow create: if isAdmin() || (
+        isSignedIn() && 
+        request.resource.data.barcode is string &&
+        (request.resource.data.source == 'openfoodfacts' || request.resource.data.source == 'goodies')
+      );
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Community unknown barcode submissions
+    match /product_submissions/{submissionId} {
+      allow create: if isSignedIn() 
+        && request.resource.data.submittedBy == request.auth.uid
+        && request.resource.data.barcode is string
+        && request.resource.data.barcode.size() <= 64;
+      
+      allow read: if isSignedIn() && (
+        resource.data.submittedBy == request.auth.uid || isAdmin()
+      );
+
+      allow update, delete: if isAdmin();
+    }
+
+    // Unknown barcodes report collection
+    match /unknown_barcodes/{reportId} {
+      allow read: if isSignedIn() || isAdmin();
+      allow create: if request.resource.data.barcode is string;
+      allow update, delete: if isAdmin();
+    }
+  }
+}
