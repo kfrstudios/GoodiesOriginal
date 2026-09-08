@@ -218,7 +218,7 @@ export async function loadOrCreateUserDoc(
   let snap;
   try {
     snap = await getDoc(userDocRef);
-  } catch (err) {
+  } catch (err: any) {
     console.warn('Firestore fetch user notice, checking local cache:', err);
     try {
       const localSaved = localStorage.getItem(localPartitionKey);
@@ -229,6 +229,49 @@ export async function loadOrCreateUserDoc(
         }
       }
     } catch {}
+
+    const isNetworkUnavailable = 
+      err?.code === 'unavailable' || 
+      err?.message?.includes('unavailable') || 
+      err?.message?.includes('network') ||
+      err?.message?.includes('Internet connection') ||
+      (typeof navigator !== 'undefined' && !navigator.onLine);
+
+    if (isNetworkUnavailable) {
+      console.warn(`Firestore offline/unavailable für UID "${uid}". Verwende Offline-Sitzung.`);
+      const offlineFallback: UserProfile = {
+        id: uid,
+        uid: uid,
+        name: firebaseUser.displayName || 'Goodies User',
+        displayName: firebaseUser.displayName || 'Goodies User',
+        email: firebaseUser.email || '',
+        role: (firebaseUser.email === 'kiwie6868@gmail.com' || firebaseUser.email === 'admin@goodies.app') ? 'ADMIN' : 'USER',
+        photoURL: firebaseUser.photoURL || undefined,
+        authProvider: firebaseUser.providerId || 'password',
+        diet: 'Allesesser',
+        allergies: [],
+        excludedIngredients: ['Palmöl'],
+        priorities: ['Weniger Zucker', 'Mehr Eiweiß'],
+        isPro: false,
+        subscriptionTier: 'FREE',
+        onboardingCompleted: true,
+        createdAt: now,
+        updatedAt: now,
+        dailyScanCount: 0,
+        dailyScanDate: getTodayCalendarDate(),
+        dailyGoals: {
+          calories: 2150,
+          protein: 110,
+          carbs: 230,
+          fat: 65,
+          water: 2500,
+          maxSugar: 35,
+          maxSalt: 5,
+        }
+      };
+      return offlineFallback;
+    }
+
     // Do NOT fall through to create a new user profile on fetch failure!
     throw new Error(
       `Verbindungsfehler beim Laden des Profils für Benutzer "${uid}": ${(err as any)?.message || 'Bitte prüfe deine Internetverbindung.'}`

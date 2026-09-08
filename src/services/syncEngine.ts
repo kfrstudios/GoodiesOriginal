@@ -315,7 +315,12 @@ class GoodiesSyncEngine {
   private async processChange(uid: string, change: QueuedChange): Promise<void> {
     switch (change.type) {
       case 'UPDATE_PROFILE': {
-        const profile = change.payload as UserProfile;
+        const rawPayload = change.payload;
+        const profile: UserProfile = {
+          ...(typeof rawPayload === 'object' ? rawPayload : {}),
+          id: uid,
+          uid: uid
+        };
         await saveUserDoc(profile);
         break;
       }

@@ -90,16 +90,28 @@ function AppContent() {
           <p className="text-xs text-zinc-600 leading-relaxed">
             {authErrorMessage || 'Bitte melde dich erneut an, um deine Goodies-Daten sicher zu laden.'}
           </p>
-          <button
-            type="button"
-            onClick={() => {
-              setAuthErrorMessage(null);
-              setAppAuthState('LOGIN');
-            }}
-            className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-2xl transition-all"
-          >
-            Zur Anmeldung
-          </button>
+          <div className="space-y-2 pt-2">
+            <button
+              type="button"
+              onClick={() => {
+                setAuthErrorMessage(null);
+                setAppAuthState('INITIALIZING');
+              }}
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-2xl transition-all shadow-sm"
+            >
+              Erneut versuchen
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setAuthErrorMessage(null);
+                setAppAuthState('LOGIN');
+              }}
+              className="w-full py-2.5 bg-zinc-100 hover:bg-zinc-200 text-zinc-700 font-bold text-xs rounded-2xl transition-all"
+            >
+              Zur Anmeldung
+            </button>
+          </div>
         </div>
         <Toast />
       </main>

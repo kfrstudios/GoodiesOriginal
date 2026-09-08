@@ -1,6 +1,12 @@
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
 import { getAuth, Auth } from 'firebase/auth';
-import { getFirestore, initializeFirestore, Firestore } from 'firebase/firestore';
+import { 
+  getFirestore, 
+  initializeFirestore, 
+  Firestore,
+  persistentLocalCache,
+  persistentMultipleTabManager
+} from 'firebase/firestore';
 import appletConfig from '../../firebase-applet-config.json';
 
 export const firebaseConfig = {
@@ -24,10 +30,21 @@ export const firestoreDatabaseId = appletConfig.firestoreDatabaseId || '(default
 let firestoreInstance: Firestore;
 try {
   firestoreInstance = initializeFirestore(app, {
-    ignoreUndefinedProperties: true
+    ignoreUndefinedProperties: true,
+    experimentalForceLongPolling: true,
+    localCache: persistentLocalCache({
+      tabManager: persistentMultipleTabManager()
+    })
   });
-} catch {
-  firestoreInstance = getFirestore(app);
+} catch (err) {
+  try {
+    firestoreInstance = initializeFirestore(app, {
+      ignoreUndefinedProperties: true,
+      experimentalForceLongPolling: true
+    });
+  } catch {
+    firestoreInstance = getFirestore(app);
+  }
 }
 export const db: Firestore = firestoreInstance;
 
